@@ -1,0 +1,99 @@
+---
+title: "create_fullaseg_atlas.R"
+output: html_document
+date: '2023-11-16'
+---
+
+Creating new atlas based on aseg to plot global tissue phenotypes. Code based on the example [here](https://ggseg.github.io/ggsegExtra/articles/createaseg.html).
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+if(!require('pacman')) {
+  install.packages('pacman')
+}
+pacman::p_load(tidyverse, dplyr)
+```
+
+## SETUP
+Code requires that you have [FSL](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FslInstallation), [FreeSurfer](https://surfer.nmr.mgh.harvard.edu/fswiki/DownloadAndInstall) (with `license.txt`), [ImageMagick](https://imagemagick.org/script/download.php), and [orca](https://github.com/plotly/orca) installed.
+
+Install/load R packages as needed:
+*If R asks whether you want to install packages that require compillation, say no!*
+
+### freesurfer
+This package has been archived from Cran, but can be installed as follows:
+
+```{r}
+require(devtools)
+install_version("freesurfer", version = "1.6.8", repos = "http://cran.us.r-project.org")
+
+Sys.setenv(FREESURFER_HOME = "/Applications/freesurfer/7.4.1") #point to freesurfer install
+```
+
+### ggsegExtra
+can also be tricky to install! should load ggseg() and ggseg3D automatically.
+```{r}
+options(repos = c(
+  ggseg = 'https://ggseg.r-universe.dev',
+  CRAN = 'https://cloud.r-project.org'))
+install.packages('ggsegExtra')
+```
+Load
+```{r}
+library(freesurfer)
+library(ggsegExtra)
+```
+
+## MAKE ATLAS
+
+Create atlas from freesurfer average output
+**update paths as needed**
+
+```{r}
+aseg_all <- ggsegExtra::make_volumetric_ggseg(subject = "fsaverage5",
+                               steps = 1:8,
+                               output_dir = "~/Desktop/BGD_Repos/ggseg_atlas", 
+                               vertex_size_limits = c(10, NA),
+                               label_file = file.path("/Applications/freesurfer/7.4.1/subjects/fsaverage5/mri/aseg.mgz"))
+
+aseg_all$data <- filter(aseg_all$data, 
+                     !grepl("Unknown", label, ignore.case = TRUE)) #drop "unknown" region
+plot(aseg_all, alpha = .8)
+```
+
+
+```{r}
+#add col for tissue class
+aseg_all$data <- aseg_all$data %>%
+  mutate(tissue_class = as.factor(case_when(grepl("ventricle", label, ignore.case = TRUE) ~ "CSF",
+                                            grepl("choroid", label, ignore.case = TRUE) ~ "CSF",
+                                            grepl("cerebellum", label, ignore.case = TRUE) ~ "Cerebellum",
+                                            grepl("white", label, ignore.case = TRUE) ~ "WM",
+                                            grepl("CSF", label, ignore.case = TRUE) ~ "CSF",
+                                            grepl("cerebral", label, ignore.case = TRUE) ~ "cGM",
+                                            grepl("stem", label, ignore.case = TRUE) ~ "Brainstem",
+                                            TRUE ~ "sGM")))
+ggplot() +
+  ggseg::geom_brain(atlas=aseg_all, aes(fill = tissue_class))
+```
+
+Save out full atlas
+
+```{r}
+saveRDS(aseg_all, file="aseg_all_atlas.RDS")
+```
+
+Create second version excluding cerebellum and brainstem
+
+```{r}
+#make reduced version that doesn't include cerebellum and brainstem
+aseg_cerebrum <- aseg_all
+aseg_cerebrum$data <- aseg_cerebrum$data %>%
+  dplyr::filter(tissue_class != "Cerebellum" & tissue_class != "Brainstem")
+
+saveRDS(aseg_cerebrum, file="aseg_cerebrum_atlas.RDS")
+
+ggplot() +
+  ggseg::geom_brain(atlas=aseg_cerebrum, aes(fill = tissue_class))
+```
+
