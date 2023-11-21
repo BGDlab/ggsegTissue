@@ -75,6 +75,7 @@ aseg_all$data <- aseg_all$data %>%
                                             TRUE ~ "sGM")))
 ggplot() +
   ggseg::geom_brain(atlas=aseg_all, aes(fill = tissue_class))
+ggsave(file="aseg_all_plot.jpg")
 ```
 
 Save out full atlas
@@ -95,5 +96,6 @@ saveRDS(aseg_cerebrum, file="aseg_cerebrum_atlas.RDS")
 
 ggplot() +
   ggseg::geom_brain(atlas=aseg_cerebrum, aes(fill = tissue_class))
+ggsave(file="aseg_cerebrum_plot.jpg")
 ```
 
