@@ -36,4 +36,5 @@ ggplot(df) +
   ggtitle("This is my brain plot!")
 ```
 
-![aseg_cerebrum_sample](https://github.com/BGDlab/ggseg-tissueclass-atlas/assets/90057023/0961f4c4-3125-4690-826b-09b44c6da0e5)
+![aseg_cerebrum_sample](https://github.com/BGDlab/ggseg-tissueclass-atlas/assets/90057023/9ef99023-f203-4774-a30f-dab2da5a99db)
+
