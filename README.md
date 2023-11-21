@@ -12,7 +12,7 @@ This repo contains two 2D ggseg atlases for plotting based on brain tissue type.
 ![aseg_cerebrum_plot](https://github.com/BGDlab/ggseg-tissueclass-atlas/assets/90057023/d4bf3508-3f39-4683-90f1-e2807f55a329)
 
 ## Installation & Use - SECTION UNDER DEVELOPMENT
-You must have the [ggsegExtra](https://github.com/ggseg/ggsegExtra) package installed to use these atlases. If the install gives you any issues with the `freesurfer` package dependency, which has been arcived from cran, you can get it as follows:
+You must have the [ggsegExtra](https://github.com/ggseg/ggsegExtra) package installed to use these atlases (I think. If someone tries with just `ggseg` and is successful, lmk!). If the install gives you any issues with the `freesurfer` package dependency, which has been arcived from cran, you can get it as follows:
 
 ```
 require(devtools)
@@ -22,12 +22,18 @@ install_version("freesurfer", version = "1.6.8", repos = "http://cran.us.r-proje
 Once you have the packages installed and loaded, you can fork this repo (or just download the raw atlas .RDS). Load the object into your script and plot!
 
 ```
+#read in atlas
 aseg_cerebrum <- readRDS(file="./ggseg_atlas/aseg_cerebrum_atlas.RDS")
 
-#plot data in df
+#make dataframe
+df <- data.frame(my_variable = c(1, 3, 7, 4),
+                 tissue_class = c("cGM", "CSF", "sGM", "WM"))
+
+#plot
 ggplot(df) +
   ggseg::geom_brain(atlas = aseg_cerebrum, 
-             aes(fill = my_variable),
-             side = c("coronal")) +
+             aes(fill = my_variable)) +
   ggtitle("This is my brain plot!")
 ```
+
+![aseg_cerebrum_sample](https://github.com/BGDlab/ggseg-tissueclass-atlas/assets/90057023/0961f4c4-3125-4690-826b-09b44c6da0e5)
