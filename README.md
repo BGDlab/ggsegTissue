@@ -19,7 +19,13 @@ require(devtools)
 install_version("freesurfer", version = "1.6.8", repos = "http://cran.us.r-project.org")
 ```
 
-Once you have the packages installed and loaded, you can fork this repo (or just download the raw atlas .RDS). Load the object into your script and plot!
+You can install the released version of [ggsegTissue](https://github.com/) from GitHub with:
+
+```
+# install.packages("remotes")
+remotes::install_github("BGDlab/ggseg-tissueclass-atlas")
+```
+
 
 ```
 #read in atlas

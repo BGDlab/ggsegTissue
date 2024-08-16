@@ -1,0 +1,26 @@
+Package: ggsegTissue
+Title: global tissue datasets for the ggseg-plotting tool
+Version: 0.0.0.9000
+Authors@R: c(person("Gardner", "Margaret", 
+                    email = "test@test.edu", 
+                    role = c("aut", "cre"),
+                    comment = c(ORCID = "")))
+Description: This is a support package for the ggseg package.
+    It contains the global measures from freesurfer aseg to plot using functions from ggseg.
+License: CC BY 4.0
+Encoding: UTF-8
+RoxygenNote: 7.3.2
+Depends: 
+    R (>= 3.5.0),
+    ggseg
+LazyData: true
+LazyDataCompression: xz
+Suggests:
+    ggplot2,
+    tidyr,
+    knitr,
+    rmarkdown,
+    covr,
+    testthat (>= 2.1.0),
+    devtools
+VignetteBuilder: knitr
