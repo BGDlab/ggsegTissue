@@ -1,4 +1,4 @@
-# ggseg Tissueclass Atlases
+# ggsegTissue Atlases
 This repo contains two 2D ggseg atlases for plotting based on brain tissue type. Both atlases are based on the FreeSurfer aseg atlas segmentations and were created by adapting the example code [here](https://ggseg.github.io/ggsegExtra/articles/createaseg.html).
 
 ## aseg_all
