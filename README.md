@@ -16,7 +16,7 @@ You can install the released version of [ggsegTissue](https://github.com/) from 
 
 ```
 # install.packages("remotes")
-remotes::install_github("BGDlab/ggseg-tissueclass-atlas")
+remotes::install_github("BGDlab/ggsegTissue")
 ```
 To plot your data:
 
