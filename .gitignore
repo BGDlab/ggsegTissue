@@ -6,3 +6,4 @@ snapshots/
 interrim/
 masks/
 *.RDS
+labels/*.label
