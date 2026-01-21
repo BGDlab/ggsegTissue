@@ -1,7 +1,7 @@
 #' ggseg tissue class atlas
 #'
-#' 2D ggseg atlas for plotting based on brain tissue type. Atlas is based on the FreeSurfer aseg atlas segmentations and was created with data-raw/aseg_all_atlas.Rmd. Atlas parses the brain into brainstem, cerebellum, cortical GM, CSF, subcortical GM, and WM.  
-#' Version 1; 16-08-2024.
+#' 2D ggseg atlas for plotting based on brain tissue type. Atlas is based on the FreeSurfer aseg atlas segmentations and was created with data-raw/aseg_all_atlas.Rmd. Atlas parses the brain into brainstem, cerebellum, cortical GM, CSF, subcortical GM, and WM. Adjacent polygons within each tissue class are merged to create continuous regions.  
+#' Version 1.1; updated with polygon merging.
 #'
 #' @docType data
 #' @name aseg_all
@@ -18,6 +18,7 @@
 #' @rdname aseg_all
 #' @examples
 #' library(ggsegTissue)
+#' library(ggplot2)
 #' #make dataframe
 #' df <- data.frame(my_variable = c(1, 3, 7, 4),
 #'                  tissue_class = c("cGM", "CSF", "sGM", "WM"))

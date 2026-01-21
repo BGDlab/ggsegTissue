@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 if(!require('pacman')) {
   install.packages('pacman')
 }
-pacman::p_load(tidyverse, dplyr)
+pacman::p_load(tidyverse, dplyr, sf)
 ```
 
 ## SETUP
@@ -63,7 +63,7 @@ plot(aseg_all, alpha = .8)
 
 
 ```{r}
-#add col for tissue class
+#add col for tissue class and merge adjacent polygons
 aseg_all$data <- aseg_all$data %>%
   mutate(tissue_class = as.factor(case_when(grepl("ventricle", label, ignore.case = TRUE) ~ "CSF",
                                             grepl("choroid", label, ignore.case = TRUE) ~ "CSF",
@@ -72,7 +72,26 @@ aseg_all$data <- aseg_all$data %>%
                                             grepl("CSF", label, ignore.case = TRUE) ~ "CSF",
                                             grepl("cerebral", label, ignore.case = TRUE) ~ "cGM",
                                             grepl("stem", label, ignore.case = TRUE) ~ "Brainstem",
-                                            TRUE ~ "sGM")))
+                                            TRUE ~ "sGM"))) %>%
+  st_make_valid() %>%
+  # Apply a small buffer to close tiny gaps
+  st_buffer(0.5) %>%  # Adjust this value if needed (0.5 is a starting point)
+  group_by(tissue_class, side, hemi) %>%
+  summarise(
+    geometry = st_union(geometry),
+    .groups = 'drop'
+  ) %>%
+  # Shrink back by the same amount to maintain original size
+  st_buffer(-0.5) %>%
+  # Clean up any remaining topology issues
+  st_make_valid() %>%
+  mutate(
+    roi = as.character(tissue_class),
+    label = as.character(tissue_class),
+    region = as.character(tissue_class)
+  ) %>%
+  select(side, hemi, roi, geometry, label, region, tissue_class)
+
 ggplot() +
   ggseg::geom_brain(atlas=aseg_all, aes(fill = tissue_class))
 ggsave(file="aseg_all_plot.jpg")
