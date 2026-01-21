@@ -6,6 +6,8 @@ Authors@R: c(person("Gardner", "Margaret",
                     role = c("aut", "cre"),
                     comment = c(ORCID = "0000-0002-4498-0827")),
 	     person("Jung", "Benjamin",
+                    email = "jungb@chop.edu",
+                    comment = c(ORCID = "0000-0002-8906-8452"),
                     role = "ctb"))
 Description: This is a support package for the ggseg package.
     It contains the global measures from freesurfer aseg to plot using functions from ggseg.
